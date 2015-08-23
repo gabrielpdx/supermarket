@@ -22,19 +22,17 @@ public class Supermarket {
         SpringApplication.run(Supermarket.class, args);
     }
 
-    private ItemTracker inventory;
+    private InventoryManager inventory = new InventoryManager();
     private ConcurrentHashMap<Integer, ShoppingCart>
             carts = new ConcurrentHashMap<>();
+    private Register register;
 
-    public String message = "Hello world!";
-
-    @RequestMapping(method = RequestMethod.GET)
-    public String test() {
-        return message;
+    @RequestMapping(value="/", method = RequestMethod.GET)
+    public ItemTracker getInventory () {
+        return inventory;
     }
 
-
-    @RequestMapping(value = "/carts/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/carts/{id}", method = RequestMethod.PUT)
     public String addShoppingCart(
             @PathVariable("id") Integer cartID) throws ShoppingCartError {
         carts.put(cartID, new ShoppingCart());
