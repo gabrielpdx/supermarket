@@ -1,0 +1,4 @@
+test/java/supermarket/RegisterTest.class
+test/java/supermarket/ItemPricerTest.class
+test/java/supermarket/ItemTrackerTest.class
+test/java/supermarket/RegisterControllerTest.class
