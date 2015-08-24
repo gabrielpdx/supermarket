@@ -29,7 +29,12 @@ public class ItemPricer {
         }
 
         public Builder special (int quantity, int price) {
-            onSpecial = true;
+            if (specialPrice != 0 && specialQuantity != 0) {
+                onSpecial = true;
+            }
+            else {
+                onSpecial = false;
+            }
             specialQuantity = quantity;
             specialPrice = price;
             return this;
@@ -60,7 +65,6 @@ public class ItemPricer {
         quantity += quantityToAdd;
     }
 
-    // Delete quantity member and wire getCheckoutPrice here
     @JsonIgnore
     public int checkout(int quantity) {
         this.quantity = quantity;
@@ -82,7 +86,7 @@ public class ItemPricer {
 
             totalPrice += runningQuantity * price;
         }
-
+        this.quantity = 0;
         return totalPrice;
     }
 

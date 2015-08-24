@@ -8,49 +8,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Item {
 
     protected char key;
-    protected int price;
     protected int quantity;
-    protected boolean onSpecial;
-    protected int specialQuantity;
-    protected int specialPrice;
-
-    public static class Builder {
-        private char key;
-        private int price;
-        private int quantity = 0;
-        private boolean onSpecial = false;
-        private int specialQuantity = -1;
-        private int specialPrice = -1;
-
-        public Builder (char key, int initPrice) {
-            this.key = key;
-            this.price = initPrice > 0 ? initPrice : 0;
-        }
-
-        public Builder special (int quantity, int price) {
-            onSpecial = true;
-            specialQuantity = quantity;
-            specialPrice = price;
-            return this;
-        }
-
-        public Item build() {
-            return new Item(this);
-        }
-    }
-
-
-    protected Item(Builder builder) {
-        key = builder.key;
-        price = builder.price;
-        quantity = builder.quantity;
-        onSpecial = builder.onSpecial;
-
-        specialQuantity = builder.specialQuantity;
-        specialPrice = builder.specialPrice;
-    }
 
     public Item () {}
+
+    public Item (char key, int quantity) {
+        this.key = key;
+        this.quantity = quantity;
+    }
 
     public void incrementQuantity() {
         ++quantity;
@@ -64,35 +29,16 @@ public class Item {
         this.quantity = newQuantity;
     }
 
-    public char getKey() {
-        return this.key;
-    }
+    public char getKey() { return this.key; }
 
-    public int getPrice() {
-        return this.price;
-    }
-
-    public int getQuantity() {
-        return this.quantity;
-    }
-
-    public boolean isOnSpecial() { return this.onSpecial; }
-
-    public int getSpecialQuantity() {
-        return this.specialQuantity;
-    }
-
-    public int getSpecialPrice() {
-        return this.specialPrice;
-    }
+    public int getQuantity() { return this.quantity; }
 
     @JsonIgnore
-    public String getSignature() {
-        String signature = new String();
-        signature += this.key;
-        signature += this.price;
-        signature += this.specialQuantity;
-        signature += this.specialPrice;
-        return signature;
+    public String getString() {
+        String string = new String();
+        for (int i = 0; i < this.quantity; ++i) {
+            string += key;
+        }
+        return string;
     }
 }

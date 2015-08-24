@@ -1,5 +1,7 @@
 package main.java.supermarket;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,24 +11,21 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ItemTracker {
     
     protected ConcurrentHashMap<Character, Item> items = new ConcurrentHashMap();
-    public String stringRep = new String();
 
     public ItemTracker() {}
 
-    public void addItem(char ItemKey, int ItemPrice) {
-        items.put(ItemKey, new Item.Builder(ItemKey, ItemPrice).build());
-    }
-
-    public void addItem(char ItemKey, int ItemPrice,
-                          Integer ItemSpecialQuantity, Integer ItemSpecialPrice) {
-        if (ItemSpecialQuantity == null || ItemSpecialPrice == null) {
-            items.put(ItemKey, new Item.Builder(ItemKey, ItemPrice).build());
+    public void add (char key, int quantity) {
+        Item item = items.get(key);
+        if (item == null) {
+            items.put(key, new Item(key, quantity));
         }
         else {
-            items.put(ItemKey,
-                    new Item.Builder(ItemKey,
-                            ItemPrice).special(ItemSpecialQuantity, ItemSpecialPrice).build());
+            item.addToQuantity(quantity);
         }
+    }
+
+    public void addItem(char itemKey, int quantity) {
+        items.put(itemKey, new Item(itemKey, quantity));
     }
 
     public void addToItem (Character key, int addQuantity) {
@@ -49,43 +48,18 @@ public class ItemTracker {
         return items.get(key).getQuantity();
     }
 
+    @JsonIgnore
     public Collection<Item> getAllItems() {
         return items.values();
     }
 
-    public String getSignature() {
-        String signature = new String();
+    @JsonIgnore
+    public String getItemsAsString() {
+        String string = new String();
         Collection<Item> allItems = items.values();
-        for (Item Item : allItems) {
-            signature = signature.concat(Item.getSignature());
+        for (Item item : allItems) {
+            string = string.concat(item.getString());
         }
-        return signature;
+        return string;
     }
-
-//    protected ConcurrentHashMap<Character, Item>
-//            items = new ConcurrentHashMap();
-//
-//    public ItemTracker() {
-//    }
-//
-//    public void addItem (Character key, Item item) {
-//        items.put(key, item);
-//    }
-//
-//    public void addToItem (Character key, int quantity) {
-//        Integer currentQuantity = items.get(key).getQuantity();
-//        items.put(key, (currentQuantity == null ? addQuantity : currentQuantity + addQuantity));
-//    }
-//
-//    public int countItem (Character key) {
-//        return items.get(key);
-//    }
-//
-//    public void removeFromItem (Character key, Integer removeQuantity) {
-//        Integer currentQuantity = items.get(key);
-//        if (currentQuantity != null) {
-//            currentQuantity -= removeQuantity;
-//            items.put(key, (currentQuantity < 0 ? 0 : currentQuantity));
-//        }
-//    }
 }

@@ -21,9 +21,8 @@ public class Register {
 
     public void addPricer(char pricerKey, int pricerPrice,
                           int pricerSpecialQuantity, int pricerSpecialPrice) {
-        itemPricers.put(pricerKey,
-                new ItemPricer.Builder(pricerKey,
-                        pricerPrice).special(pricerSpecialQuantity, pricerSpecialPrice).build());
+        itemPricers.put(pricerKey, new ItemPricer.Builder(
+                pricerKey, pricerPrice).special(pricerSpecialQuantity, pricerSpecialPrice).build());
     }
 
 
