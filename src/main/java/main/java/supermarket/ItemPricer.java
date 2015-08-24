@@ -29,14 +29,14 @@ public class ItemPricer {
         }
 
         public Builder special (int quantity, int price) {
-            if (specialPrice != 0 && specialQuantity != 0) {
-                onSpecial = true;
+            if (specialPrice == 0 || specialQuantity == 0) {
+                this.onSpecial = false;
             }
             else {
-                onSpecial = false;
+                this.onSpecial = true;
             }
-            specialQuantity = quantity;
-            specialPrice = price;
+            this.specialQuantity = quantity;
+            this.specialPrice = price;
             return this;
         }
 
@@ -78,7 +78,8 @@ public class ItemPricer {
         if (quantity > 0) {
             int runningQuantity = quantity;
 
-            if (onSpecial && ((runningQuantity / specialQuantity) > 0)) {
+            if (onSpecial && (specialPrice != 0 && specialQuantity != 0) &&
+                    ((runningQuantity / specialQuantity) > 0)) {
                 int specialGroups = runningQuantity / specialQuantity;
                 totalPrice += specialGroups * specialPrice;
                 runningQuantity = runningQuantity % specialQuantity;
